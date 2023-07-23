@@ -1,0 +1,12 @@
+.modal-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.modal-overlay .modal {
+  padding: 2rem;
+  margin: 2rem auto;
+}

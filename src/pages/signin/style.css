@@ -1,0 +1,42 @@
+.signin-wrapper {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.signin-wrapper > header {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+}
+.signin-wrapper > header h1 a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.signin-wrapper > header img {
+  width: 50px;
+}
+.signin-wrapper > section {
+  flex: 9;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem 1rem;
+}
+.signin-wrapper .form {
+  padding: 2rem;
+  max-width: 450px;
+  width: 100%;
+}
+.signin-wrapper .form input:not(input[type="checkbox"]) {
+  width: 100%;
+  padding: 0.75rem;
+  outline: none;
+  border: 1px solid #333;
+  border-radius: 3px;
+  font-size: 1.25rem;
+}

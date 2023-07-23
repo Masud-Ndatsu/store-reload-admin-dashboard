@@ -1,0 +1,19 @@
+.dashboard-wrapper {
+  display: flex;
+  min-height: 100vh;
+}
+.dashboard-wrapper aside {
+  color: white;
+  flex: 3;
+  padding: 1.5rem;
+  background-color: var(--main-blue);
+}
+.dashboard-wrapper aside ul li {
+  list-style: none;
+}
+.dashboard-wrapper .content {
+  color: var(--main-blue);
+  flex: 8;
+  background-color: white;
+  padding: 1.5rem;
+}
