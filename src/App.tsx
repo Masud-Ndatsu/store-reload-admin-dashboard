@@ -9,12 +9,12 @@ import { Dashboard } from "./pages/dashboard";
 
 const router = createBrowserRouter([
   { path: "/", element: <Dashboard /> },
+  { path: "/dashboard", element: <Dashboard /> },
   { path: "/auth/signin", element: <Signin /> },
   { path: "/auth/signup", element: <Signup /> },
   { path: "/auth/forgot-password", element: <ForgotPassword /> },
   { path: "/auth/reset-password", element: <ResetPassword /> },
-  { path: "/auth/change-password/", element: <NewPassword /> },
-  { path: "/dashboard", element: <Dashboard /> },
+  { path: "/auth/change-password", element: <NewPassword /> },
 ]);
 
 function App() {

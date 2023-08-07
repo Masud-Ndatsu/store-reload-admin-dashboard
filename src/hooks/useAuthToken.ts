@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 
 interface IUser {
   token: string;
@@ -8,12 +8,17 @@ interface IUser {
   };
 }
 
-export const useAuthToken = (): IUser => {
-  const [user, setUser] = useState({} as IUser);
+export const useAuthToken = () => {
+  const [user, setUser] = useState<IUser | undefined>(undefined);
+
+  const token = useMemo(() => {
+    if (!user?.token) return "";
+    return user.token;
+  }, [user]);
 
   useEffect(() => {
     setUser(JSON.parse(window.localStorage.getItem("user") ?? "{}"));
   }, []);
 
-  return user;
+  return { user, token };
 };

@@ -1,0 +1,15 @@
+.wrapper {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem;
+  border: 1px solid var(--main-blue);
+  border-top: none;
+}
+
+.wrapper:first-child {
+  border-radius: 3px 3px 0 0;
+  border-top: 1px solid var(--main-blue);
+}
+.wrapper:last-child {
+  border-radius: 0 0 3px 3px;
+}

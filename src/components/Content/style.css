@@ -1,3 +1,20 @@
+.content .dash-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.content .dash-bar .dash-button {
+  background-color: var(--main-blue);
+  color: white;
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  border: none;
+  font-size: 0.925rem;
+  border-radius: 3px;
+}
+
 .content .tabs button {
   background-color: white;
   padding: 0.25rem;
@@ -101,4 +118,33 @@
   padding: 0.75rem;
   background-color: var(--main-blue);
   color: white;
+}
+
+table {
+  /* background-color: #ccc; */
+  border-collapse: collapse;
+  border-radius: 3px;
+  width: 100%;
+}
+
+thead {
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0.1);
+  font-size: 0.825rem;
+}
+thead tr th {
+  padding: 1rem;
+}
+
+td {
+  padding: 0.35rem 0;
+  font-size: 0.825rem;
+}
+
+tr {
+  border: 1px solid #ccc;
+  border-bottom: none;
+}
+
+tr:last-child {
+  border-bottom: 1px solid #ccc;
 }

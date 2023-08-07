@@ -9,16 +9,6 @@ type Props = {
 };
 
 export const Modal = ({ isOpen, onClose, children }: Props) => {
-  React.useEffect(() => {
-    const element = document.createElement("div");
-    element.id = "modal-root";
-    document.body.appendChild(element);
-
-    return () => {
-      document.body.removeChild(element);
-    };
-  }, []);
-
   if (!isOpen) return null;
 
   return ReactDOM.createPortal(
