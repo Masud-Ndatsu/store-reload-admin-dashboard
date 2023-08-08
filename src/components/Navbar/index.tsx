@@ -17,7 +17,7 @@ export const Navbar = (): JSX.Element => {
         <input
           type="search"
           name="search"
-          id=""
+          autoComplete="off"
           placeholder="Search for something"
         />
       </div>
