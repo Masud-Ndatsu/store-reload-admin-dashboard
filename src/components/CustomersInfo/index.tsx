@@ -5,7 +5,7 @@ import { useAuthToken } from "../../hooks/useAuthToken";
 import { Customers } from "./Customers";
 
 export const CustomersInfo = () => {
-  const { user } = useAuthToken();
+  const user = useAuthToken();
   const [loading, setLoading] = useState<boolean>(true);
   const [customers, setCustomers] = useState<ICustomer[]>([]);
 

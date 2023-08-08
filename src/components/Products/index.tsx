@@ -5,7 +5,7 @@ import { Product } from "./Product";
 import { IProduct } from "./types";
 
 export const Products = () => {
-  const { user } = useAuthToken();
+  const user = useAuthToken();
   const [loading, setLoading] = useState<boolean>(true);
   const [productLength, setProductLength] = useState<number>(0);
   const [products, setProducts] = useState<IProduct[]>([]);

@@ -13,7 +13,7 @@ interface IProps {
 }
 
 export const ProductForm = (props: IProps) => {
-  const { user } = useAuthToken();
+  const user = useAuthToken();
   const [loading, setLoading] = useState<boolean>(true);
   const [imageFiles, setImageFiles] = useState<FileList | null>({} as FileList);
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);

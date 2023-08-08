@@ -11,7 +11,7 @@ type Props = {
 };
 
 export const ProductItem = ({ product, index }: Props) => {
-  const { user } = useAuthToken();
+  const user = useAuthToken();
 
   const handleDelete = useCallback(async (): Promise<void> => {
     if (!user?.token) return;
