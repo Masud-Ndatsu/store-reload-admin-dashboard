@@ -56,7 +56,7 @@ export const Content = () => {
     }
   }, [tab]);
   return (
-    <div className="content">
+    <div className="content" style={{ overflowY: "scroll" }}>
       <Navbar />
       {activeTab}
     </div>

@@ -11,14 +11,9 @@ interface IUser {
 export const useAuthToken = () => {
   const [user, setUser] = useState<IUser | undefined>(undefined);
 
-  const token = useMemo(() => {
-    if (!user?.token) return "";
-    return user.token;
-  }, [user]);
-
   useEffect(() => {
-    setUser(JSON.parse(window.localStorage.getItem("user") ?? "{}"));
+    setUser(JSON.parse(window.localStorage.getItem("user") as string));
   }, []);
 
-  return { user, token };
+  return user;
 };

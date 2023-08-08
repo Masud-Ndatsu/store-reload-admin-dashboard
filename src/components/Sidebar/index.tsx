@@ -3,7 +3,7 @@ import "./style.css";
 
 export const Sidebar = () => {
   const handleLogout = (): void => {
-    if (window.localStorage.getItem("user")) {
+    if (JSON.parse(window.localStorage.getItem("user") as string)?.user) {
       window.localStorage.removeItem("user");
       window.location.reload();
       console.log("LOGOUT SUCCESSFUL");
@@ -14,7 +14,7 @@ export const Sidebar = () => {
   };
 
   return (
-    <aside className="sidebar-wrapper">
+    <aside className="sidebar-wrapper" style={{ overflow: "hidden" }}>
       <h2>
         <Link to={"/"}>StoreReload</Link>
       </h2>
@@ -41,7 +41,7 @@ export const Sidebar = () => {
         </li>
       </ul>
       <div className="logout">
-        <Link to={"/"} onClick={() => handleLogout()}>
+        <Link to={"/"} onClick={handleLogout}>
           Log out
         </Link>
       </div>
