@@ -5,6 +5,7 @@ export const Sidebar = () => {
   const handleLogout = (): void => {
     if (window.localStorage.getItem("user")) {
       window.localStorage.removeItem("user");
+      window.location.reload();
       console.log("LOGOUT SUCCESSFUL");
     } else {
       console.log("Already logged out");
@@ -40,7 +41,7 @@ export const Sidebar = () => {
         </li>
       </ul>
       <div className="logout">
-        <Link to={"/"} onClick={handleLogout}>
+        <Link to={"/"} onClick={() => handleLogout()}>
           Log out
         </Link>
       </div>
