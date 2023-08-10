@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { HashRouter as Router, Route, Routes } from "react-router-dom";
 import { Signin } from "./pages/signin";
 import { Signup } from "./pages/signup";
 import { ForgotPassword } from "./pages/forgotpassword";
@@ -9,7 +9,7 @@ import { Dashboard } from "./pages/dashboard";
 function App() {
   return (
     <>
-      <BrowserRouter basename="/">
+      <Router>
         <Routes>
           <Route path="/" element={<Dashboard />} />
           <Route path="dashboard" element={<Dashboard />} />
@@ -19,7 +19,7 @@ function App() {
           <Route path="auth/reset-password" element={<ResetPassword />} />
           <Route path="auth/change-password" element={<NewPassword />} />
         </Routes>
-      </BrowserRouter>
+      </Router>
     </>
   );
 }
