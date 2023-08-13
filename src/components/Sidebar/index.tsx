@@ -14,7 +14,7 @@ export const Sidebar = () => {
   };
 
   return (
-    <aside className="sidebar-wrapper" style={{ overflow: "hidden" }}>
+    <aside className="sidebar-wrapper">
       <h2>
         <Link to={"/"}>StoreReload</Link>
       </h2>

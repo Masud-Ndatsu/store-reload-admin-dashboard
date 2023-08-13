@@ -34,17 +34,22 @@ export const Signin = () => {
           "https://store-reload.onrender.com/api/v1/admin/auth/login",
           user
         );
+
         if (result.status === 200) {
+          toast.success(result.data.message, {
+            position: toast.POSITION.BOTTOM_RIGHT,
+          });
           setUser({ ...user, email: "", password: "" });
-          navigate("/dashboard");
+          window.localStorage.setItem("user", JSON.stringify(result.data.data));
+          setTimeout(() => {
+            navigate("/dashboard");
+          }, 1000);
         }
-        window.localStorage.setItem("user", JSON.stringify(result.data.data));
-        toast(result.data.message);
 
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (error: any) {
-        toast(error.response.data.message);
-        console.error("ERROR", error.response.data);
+        toast.error(error?.response?.data.message);
+        console.error("ERROR", error?.response?.data.message);
       }
     },
     [user, navigate]

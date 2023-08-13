@@ -26,19 +26,37 @@ export const Product = (props: IProps) => {
       </div>
       <div>
         <div
-          className="tabs"
           style={{
             display: "flex",
-            gap: "2rem",
-            backgroundColor: "#f2f2f2",
-            maxWidth: "max-content",
-            padding: "0.5rem 0.75rem",
-            borderRadius: "20px",
+            alignItems: "center",
+            justifyContent: "space-between",
           }}>
-          <button>Consumable goods</button>
-          <button>Medicals</button>
+          <div
+            className="tabs"
+            style={{
+              display: "flex",
+              gap: "2rem",
+              backgroundColor: "#f2f2f2",
+              maxWidth: "max-content",
+              padding: "0.5rem 0.75rem",
+              borderRadius: "20px",
+            }}>
+            <button>Consumable goods</button>
+            <button>Medicals</button>
+          </div>
+          <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
+            <button
+              style={
+                !props.loading
+                  ? { padding: ".5rem .75rem" }
+                  : { border: "none", backgroundColor: "white" }
+              }>
+              Previous page
+            </button>
+            {1 + " to " + 3}
+            <button style={{ padding: ".5rem .75rem" }}>Next page</button>
+          </div>
         </div>
-
         {!props.loading ? (
           <Loading />
         ) : !props.productLength ? (
