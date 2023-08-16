@@ -5,10 +5,8 @@ import { ForgotPassword } from "./pages/forgotpassword";
 import { ResetPassword } from "./pages/resetpassword";
 import { NewPassword } from "./pages/newpassword";
 import { Dashboard } from "./pages/dashboard";
-import { useState } from "react";
 
 function App() {
-  const [isAuthenticated, setAuthenticated] = useState(false);
   return (
     <>
       <Router>

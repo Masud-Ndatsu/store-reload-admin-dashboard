@@ -9,10 +9,12 @@ interface IProps {
   products: IProduct[];
   loading: boolean;
   productLength: number;
+  setType: React.Dispatch<React.SetStateAction<string>>;
 }
 export const Product = (props: IProps) => {
   const products = props.products;
   const [showModal, setShowModal] = useState<boolean>(false);
+  const setType = props.setType;
   return (
     <div>
       <div className="dash-bar" style={{ marginBottom: "1rem" }}>
@@ -30,7 +32,8 @@ export const Product = (props: IProps) => {
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-          }}>
+          }}
+        >
           <div
             className="tabs"
             style={{
@@ -40,9 +43,14 @@ export const Product = (props: IProps) => {
               maxWidth: "max-content",
               padding: "0.5rem 0.75rem",
               borderRadius: "20px",
-            }}>
-            <button>Consumable goods</button>
-            <button>Medicals</button>
+            }}
+          >
+            <button id="general" onClick={() => setType("general")}>
+              Consumable goods
+            </button>
+            <button id="medical" onClick={() => setType("medical")}>
+              Medicals
+            </button>
           </div>
           <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
             <button
@@ -50,7 +58,8 @@ export const Product = (props: IProps) => {
                 !props.loading
                   ? { padding: ".5rem .75rem" }
                   : { border: "none", backgroundColor: "white" }
-              }>
+              }
+            >
               Previous page
             </button>
             {1 + " to " + 3}

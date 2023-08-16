@@ -9,14 +9,16 @@ export const Products = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [productLength, setProductLength] = useState<number>(0);
   const [products, setProducts] = useState<IProduct[]>([]);
-
+  const [type, setType] = useState<string>("general");
+  console.log(type);
   const fetchProductData = useCallback(async () => {
     if (!user?.token) return;
 
     try {
       setLoading(false);
       const result = await api().get(
-        "https://store-reload.onrender.com/api/v1/admin/product/getMany?type=general",
+        "https://store-reload.onrender.com/api/v1/admin/product/getMany?type=" +
+          type,
         {
           headers: {
             "Content-Type": "application/json",
@@ -33,7 +35,7 @@ export const Products = () => {
     } catch (error: any) {
       console.error("ERROR: ", error?.response?.data);
     }
-  }, [user]);
+  }, [user, type]);
   useEffect(() => {
     fetchProductData();
   }, [fetchProductData]);
@@ -44,6 +46,7 @@ export const Products = () => {
         products={products}
         productLength={productLength}
         loading={loading}
+        setType={setType}
       />
     </div>
   );

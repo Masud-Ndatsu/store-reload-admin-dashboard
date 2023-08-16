@@ -34,16 +34,14 @@ export const Signin = () => {
           "https://store-reload.onrender.com/api/v1/admin/auth/login",
           user
         );
-
+        console.log("RESULT", result);
         if (result.status === 200) {
           toast.success(result.data.message, {
             position: toast.POSITION.BOTTOM_RIGHT,
           });
           setUser({ ...user, email: "", password: "" });
           window.localStorage.setItem("user", JSON.stringify(result.data.data));
-          setTimeout(() => {
-            navigate("/dashboard");
-          }, 1000);
+          navigate("/dashboard");
         }
 
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -94,7 +92,8 @@ export const Signin = () => {
               gap: "0.5rem",
               margin: "1rem 0",
               cursor: "pointer",
-            }}>
+            }}
+          >
             <input type="checkbox" id="checkbox" />
             <label htmlFor="checkbox">Remember me</label>
           </div>

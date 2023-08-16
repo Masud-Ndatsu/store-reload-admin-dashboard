@@ -1,10 +1,12 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./style.css";
 
 export const Sidebar = () => {
+  const navigate = useNavigate();
   const handleLogout = (): void => {
     if (JSON.parse(window.localStorage.getItem("user") as string)?.user) {
       window.localStorage.removeItem("user");
+      navigate("/auth/signin");
       window.location.reload();
       console.log("LOGOUT SUCCESSFUL");
     } else {

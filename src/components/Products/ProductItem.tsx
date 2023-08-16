@@ -12,7 +12,7 @@ type Props = {
 
 export const ProductItem = ({ product, index }: Props) => {
   const user = useAuthToken();
-
+  console.log(product);
   const handleDelete = useCallback(async (): Promise<void> => {
     if (!user?.token) return;
     const { token } = user;
@@ -42,12 +42,16 @@ export const ProductItem = ({ product, index }: Props) => {
       <tr style={{ cursor: "pointer" }}>
         <td>{(index + 1).toString().padStart(2, "0")}</td>
         <td>
-          <img style={{ width: "30px" }} src={product.image[0]} alt="" />
+          <img
+            style={{ width: "30px", margin: "auto" }}
+            src={product.images[0]}
+            alt=""
+          />
         </td>
         <td>{product.name}</td>
         <td>{product.size ?? "Carton"}</td>
         <td>{product.description}</td>
-        <td>500</td>
+        <td>{product.price ?? 500}</td>
         <td>
           <span onClick={handleDelete}>
             <RiDeleteBin6Line />

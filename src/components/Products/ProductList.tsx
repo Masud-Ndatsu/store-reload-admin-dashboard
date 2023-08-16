@@ -1,15 +1,6 @@
 import { ProductItem } from "./ProductItem";
-interface IProduct {
-  _id: string;
-  name: string;
-  category: string;
-  description: string;
-  image: string[];
-  type: string;
-  price: string;
-  size: string;
-  tags: string;
-}
+import { IProduct } from "./types";
+
 type Props = {
   products: IProduct[];
 };
@@ -24,7 +15,8 @@ export const ProductList = (props: Props) => {
         width: "100%",
         marginTop: "1rem",
         textAlign: "center",
-      }}>
+      }}
+    >
       <table>
         <thead>
           <tr>
