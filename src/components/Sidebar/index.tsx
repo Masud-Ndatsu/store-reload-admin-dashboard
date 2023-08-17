@@ -9,10 +9,8 @@ export const Sidebar = () => {
       navigate("/auth/signin");
       window.location.reload();
       console.log("LOGOUT SUCCESSFUL");
-    } else {
-      console.log("Already logged out");
+      return;
     }
-    return;
   };
 
   return (
