@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
 import { FiEdit2 } from "react-icons/fi";
-import profile from "../../assets/profile.jpg";
 import "./style.css";
 import { useAuthToken } from "../../hooks/useAuthToken";
 
 export const Settings = () => {
   const tokenData = useAuthToken();
   const [avatar, setAvatar] = useState<string>("");
-
+  console.log(avatar);
   useEffect(() => {
     if (!tokenData?.token) return;
     setAvatar(tokenData.user?.avatar as string);
@@ -24,7 +23,7 @@ export const Settings = () => {
         </div>
         <div>
           <div className="image" style={{ position: "relative" }}>
-            <img src={avatar ?? profile} alt="" />
+            <img src={avatar} alt="" />
             {true ? (
               <div className="edit-icon">+</div>
             ) : (
