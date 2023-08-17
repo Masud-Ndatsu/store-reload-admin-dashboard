@@ -15,6 +15,19 @@
   border-radius: 50%;
 }
 
+.admin-settings .image .edit-icon {
+  height: 30px;
+  width: 30px;
+  display: grid;
+  place-items: center;
+  background-color: var(--main-blue);
+  color: white;
+  border-radius: 50%;
+  position: absolute;
+  top: 60%;
+  right: 0;
+}
+
 .admin-settings .image img {
   width: 100%;
   height: 100%;
@@ -34,7 +47,17 @@
 .admin-settings form label {
   flex: 0.4;
 }
-.admin-settings form input {
+.admin-settings form .input-wrapper {
   flex: 1;
-  padding: 0.75rem;
+  border: 1px solid #ccc;
+  padding: 0 0.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.admin-settings form .input-wrapper input {
+  border: none;
+  outline: none;
+  padding: 0.75rem 0;
+  width: 100%;
 }
