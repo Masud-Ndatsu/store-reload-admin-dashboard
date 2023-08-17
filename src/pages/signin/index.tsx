@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -6,8 +6,9 @@ import logo from "../../assets/store-logo.png";
 import "./style.css";
 import { Input } from "../../components/Input";
 import { api } from "../../api/request";
+import { useAuthToken } from "../../hooks/useAuthToken";
 
-interface IUser {
+export interface IUser {
   email: string;
   password: string;
   status?: boolean;
@@ -15,6 +16,7 @@ interface IUser {
 
 export const Signin = () => {
   const navigate = useNavigate();
+  const tokenData = useAuthToken();
   const [user, setUser] = React.useState<IUser>({ email: "", password: "" });
 
   const handleChange = React.useCallback(
@@ -24,6 +26,12 @@ export const Signin = () => {
     },
     [user]
   );
+  useEffect(() => {
+    if (!tokenData?.token) return;
+    if (tokenData?.token) {
+      return navigate("/dashboard");
+    }
+  }, []);
 
   const handleLogin = React.useCallback(
     async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
@@ -35,19 +43,18 @@ export const Signin = () => {
           user
         );
         console.log("RESULT", result);
-        if (result.status === 200) {
-          toast.success(result.data.message, {
-            position: toast.POSITION.BOTTOM_RIGHT,
-          });
+        if (result.status == 200) {
+          toast.success(result.data.message);
           setUser({ ...user, email: "", password: "" });
           window.localStorage.setItem("user", JSON.stringify(result.data.data));
           navigate("/dashboard");
         }
-
+        return;
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (error: any) {
         toast.error(error?.response?.data.message);
         console.error("ERROR", error?.response?.data.message);
+        return;
       }
     },
     [user, navigate]
