@@ -6,6 +6,7 @@ import { Input } from "../Input";
 import { api } from "../../api/request";
 import { useAuthToken } from "../../hooks/useAuthToken";
 import { ProductTag } from "../ProductTag";
+import Loading from "../Loading";
 
 interface IProps {
   showModal: boolean;
@@ -14,7 +15,7 @@ interface IProps {
 
 export const ProductForm = (props: IProps) => {
   const user = useAuthToken();
-  // const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
   const [imageFiles, setImageFiles] = useState<FileList | null>({} as FileList);
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
   const [productCategory, setProductCategory] = useState<string>("");
@@ -24,7 +25,7 @@ export const ProductForm = (props: IProps) => {
   const [productPrice, setProductPrice] = useState<string>("");
   const [productType, setProductType] = useState<string>("");
   const [productTags, setProductTags] = useState<string[]>([]);
-  console.log(productTags);
+
   const handleFileUpload = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       setImageFiles(e.target.files);
@@ -52,13 +53,14 @@ export const ProductForm = (props: IProps) => {
           !productSize ||
           productTags.length == 0 ||
           !productType ||
-          imageFiles?.length == 0
+          !productPrice ||
+          imagePreviews.length == 0
         ) {
           // throw custom error
           toast("Complete all form fields");
           return;
         }
-
+        setLoading(true);
         const formData = new FormData();
         for (const image of imageFiles || []) {
           formData.append("image", image);
@@ -67,6 +69,7 @@ export const ProductForm = (props: IProps) => {
         formData.append("category", productCategory);
         formData.append("description", productDescription);
         formData.append("type", productType);
+        formData.append("price", productPrice);
         formData.append("tags", JSON.stringify(productTags));
 
         const result = await api().post(
@@ -79,8 +82,10 @@ export const ProductForm = (props: IProps) => {
             },
           }
         );
-        console.log("RESPONSE", result);
-        if (result.status === 201) {
+
+        setLoading(false);
+        if (result.status == 201) {
+          toast(result.data.message);
           setProductCategory("");
           setProductName("");
           setProductDescription("");
@@ -89,13 +94,14 @@ export const ProductForm = (props: IProps) => {
           setProductTags([]);
           window.location.reload();
         }
-        toast(result.data.message);
         console.log(result.data);
+        setLoading(false);
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (error: any) {
-        console.log({ error });
-        // toast(error?.response?.data?.message);
-        // console.error("ERROR", error?.response?.data);
+        // console.log({ error });
+        setLoading(false);
+        toast(error?.response?.data?.message);
+        console.error("ERROR", error?.response?.data);
       }
     },
     [
@@ -105,6 +111,7 @@ export const ProductForm = (props: IProps) => {
       productSize,
       productTags,
       productType,
+      productPrice,
       user,
       imageFiles,
     ]
@@ -124,120 +131,124 @@ export const ProductForm = (props: IProps) => {
           }}
         >
           <h1>Add Product</h1>
-          <div className="product">
-            {
-              <>
-                <div className="image-box">
-                  <input
-                    type="file"
-                    id="file"
-                    multiple
-                    onChange={handleFileUpload}
-                    style={{ display: "none" }}
-                  />
-                  <label htmlFor="file">
-                    <IoIosAdd />
-                    Add pictures
-                  </label>
-                  {imagePreviews?.length > 0 && (
-                    <div style={{ display: "flex", flexWrap: "wrap" }}>
-                      {imagePreviews?.map((previewUrl, index) => (
-                        <img
-                          key={index}
-                          src={previewUrl}
-                          alt={`Image Preview ${index + 1}`}
-                          style={{
-                            width: "50px",
-                            height: "50px",
-                            margin: "5px",
-                          }}
-                        />
-                      ))}
+          {loading ? (
+            <Loading />
+          ) : (
+            <div className="product">
+              {
+                <>
+                  <div className="image-box">
+                    <input
+                      type="file"
+                      id="file"
+                      multiple
+                      onChange={handleFileUpload}
+                      style={{ display: "none" }}
+                    />
+                    <label htmlFor="file">
+                      <IoIosAdd />
+                      Add pictures
+                    </label>
+                    {imagePreviews?.length > 0 && (
+                      <div style={{ display: "flex", flexWrap: "wrap" }}>
+                        {imagePreviews?.map((previewUrl, index) => (
+                          <img
+                            key={index}
+                            src={previewUrl}
+                            alt={`Image Preview ${index + 1}`}
+                            style={{
+                              width: "50px",
+                              height: "50px",
+                              margin: "5px",
+                            }}
+                          />
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                  <form className="product-form" onSubmit={handleSubmit}>
+                    <Input
+                      label="Product Category"
+                      type="text"
+                      name="category"
+                      value={productCategory}
+                      handleChange={(e) => setProductCategory(e.target.value)}
+                      placeholder="e.g Beverages"
+                    />
+                    <Input
+                      label="Product name"
+                      type="text"
+                      name="name"
+                      value={productName}
+                      handleChange={(e) => setProductName(e.target.value)}
+                      placeholder="e.g Sugar 50kg"
+                    />
+                    <div>
+                      <label htmlFor="description">Product description</label>
+                      <textarea
+                        name="description"
+                        id="description"
+                        style={{ width: "100%", resize: "none" }}
+                        value={productDescription}
+                        onChange={(e) => setProductDescription(e.target.value)}
+                        cols={30}
+                        rows={10}
+                      ></textarea>
                     </div>
-                  )}
-                </div>
-                <form className="product-form" onSubmit={handleSubmit}>
-                  <Input
-                    label="Product Category"
-                    type="text"
-                    name="category"
-                    value={productCategory}
-                    handleChange={(e) => setProductCategory(e.target.value)}
-                    placeholder="e.g Beverages"
-                  />
-                  <Input
-                    label="Product name"
-                    type="text"
-                    name="name"
-                    value={productName}
-                    handleChange={(e) => setProductName(e.target.value)}
-                    placeholder="e.g Sugar 50kg"
-                  />
-                  <div>
-                    <label htmlFor="description">Product description</label>
-                    <textarea
-                      name="description"
-                      id="description"
-                      style={{ width: "100%", resize: "none" }}
-                      value={productDescription}
-                      onChange={(e) => setProductDescription(e.target.value)}
-                      cols={30}
-                      rows={10}
-                    ></textarea>
-                  </div>
-                  <Input
-                    label="Product size"
-                    type="text"
-                    name="size"
-                    value={productSize}
-                    handleChange={(e) => setProductSize(e.target.value)}
-                    placeholder="e.g 10kg"
-                  />
-                  <Input
-                    label="Product price"
-                    type="text"
-                    name="price"
-                    value={productPrice}
-                    handleChange={(e) => setProductPrice(e.target.value)}
-                    placeholder="e.g #1000"
-                  />
-                  <ProductTag tags={productTags} setTags={setProductTags} />
-                  <div style={{ margin: "1rem 0" }}>
-                    <label htmlFor="type">Product Type</label>
-                    <select
-                      name="type"
-                      id="type"
-                      style={{ width: "100%", padding: "0.75rem" }}
-                      value={productType}
-                      onChange={(e) => setProductType(e.target.value)}
-                    >
-                      <option
-                        value=""
+                    <Input
+                      label="Product size"
+                      type="text"
+                      name="size"
+                      value={productSize}
+                      handleChange={(e) => setProductSize(e.target.value)}
+                      placeholder="e.g 10kg"
+                    />
+                    <Input
+                      label="Product price"
+                      type="text"
+                      name="price"
+                      value={productPrice}
+                      handleChange={(e) => setProductPrice(e.target.value)}
+                      placeholder="e.g #1000"
+                    />
+                    <ProductTag tags={productTags} setTags={setProductTags} />
+                    <div style={{ margin: "1rem 0" }}>
+                      <label htmlFor="type">Product Type</label>
+                      <select
+                        name="type"
+                        id="type"
                         style={{ width: "100%", padding: "0.75rem" }}
+                        value={productType}
+                        onChange={(e) => setProductType(e.target.value)}
                       >
-                        Select Type
-                      </option>
-                      <option
-                        value="general"
-                        style={{ width: "100%", padding: "0.75rem" }}
-                      >
-                        General / Consumable goods
-                      </option>
-                      <option
-                        value="medical"
-                        style={{ width: "100%", padding: "1rem 0.75rem" }}
-                      >
-                        Medical
-                      </option>
-                    </select>
-                  </div>
-                  <div>
-                    <button type="submit">Submit</button>
-                  </div>
-                </form>
-              </>
-            }
-          </div>
+                        <option
+                          value=""
+                          style={{ width: "100%", padding: "0.75rem" }}
+                        >
+                          Select Type
+                        </option>
+                        <option
+                          value="general"
+                          style={{ width: "100%", padding: "0.75rem" }}
+                        >
+                          General / Consumable goods
+                        </option>
+                        <option
+                          value="medical"
+                          style={{ width: "100%", padding: "1rem 0.75rem" }}
+                        >
+                          Medical
+                        </option>
+                      </select>
+                    </div>
+                    <div>
+                      <button type="submit">Submit</button>
+                    </div>
+                  </form>
+                </>
+              }
+            </div>
+          )}
         </div>
         <ToastContainer />
       </Modal>

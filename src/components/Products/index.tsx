@@ -9,8 +9,8 @@ export const Products = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [productLength, setProductLength] = useState<number>(0);
   const [products, setProducts] = useState<IProduct[]>([]);
-  const [type, setType] = useState<string>("general");
-  console.log(type);
+  const [type, setType] = useState<"general" | "medical">("general");
+
   const fetchProductData = useCallback(async () => {
     if (!user?.token) return;
 
@@ -43,6 +43,7 @@ export const Products = () => {
   return (
     <div>
       <Product
+        type={type}
         products={products}
         productLength={productLength}
         loading={loading}

@@ -9,10 +9,12 @@ interface IProps {
   products: IProduct[];
   loading: boolean;
   productLength: number;
-  setType: React.Dispatch<React.SetStateAction<string>>;
+  setType: React.Dispatch<React.SetStateAction<"general" | "medical">>;
+  type: string;
 }
 export const Product = (props: IProps) => {
   const products = props.products;
+  const type = props.type;
   const [showModal, setShowModal] = useState<boolean>(false);
   const setType = props.setType;
   return (
@@ -45,7 +47,14 @@ export const Product = (props: IProps) => {
               borderRadius: "20px",
             }}
           >
-            <button id="general" onClick={() => setType("general")}>
+            <button
+              id="general"
+              style={{
+                backgroundColor: `${type === "general" && "var(--main-blue)"}`,
+                color: `${type === "general" && "white"}`,
+              }}
+              onClick={() => setType("general")}
+            >
               Consumable goods
             </button>
             <button id="medical" onClick={() => setType("medical")}>

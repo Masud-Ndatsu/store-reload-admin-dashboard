@@ -12,7 +12,6 @@ type Props = {
 
 export const ProductItem = ({ product, index }: Props) => {
   const user = useAuthToken();
-  console.log(product);
   const handleDelete = useCallback(async (): Promise<void> => {
     if (!user?.token) return;
     const { token } = user;
@@ -39,11 +38,17 @@ export const ProductItem = ({ product, index }: Props) => {
 
   return (
     <>
-      <tr style={{ cursor: "pointer" }}>
+      <tr style={{ cursor: "pointer", backgroundColor: "gray" }}>
         <td>{(index + 1).toString().padStart(2, "0")}</td>
         <td>
           <img
-            style={{ width: "30px", margin: "auto" }}
+            style={{
+              width: "100%",
+              maxWidth: "50px",
+              maxHeight: "50px",
+              height: "100%",
+              margin: "auto",
+            }}
             src={product.images[0]}
             alt=""
           />
