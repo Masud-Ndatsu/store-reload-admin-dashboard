@@ -11,14 +11,13 @@ type Props = {
 };
 
 export const ProductItem = ({ product, index }: Props) => {
-  const user = useAuthToken();
+  const { token } = useAuthToken();
+  const { _id: id } = product;
   const handleDelete = useCallback(async (): Promise<void> => {
-    if (!user?.token) return;
-    const { token } = user;
     try {
       const result = await api().delete(
         "https://store-reload.onrender.com/api/v1/admin/product/delete?productId=" +
-          product._id,
+          id,
 
         {
           headers: {
@@ -28,17 +27,18 @@ export const ProductItem = ({ product, index }: Props) => {
         }
       );
       if (result.data.status) {
-        window.location.reload();
+        // window.location.reload();
+        navigator;
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       console.log("ERROR", error.response.data.message);
     }
-  }, [user, product]);
+  }, [token, id]);
 
   return (
     <>
-      <tr style={{ cursor: "pointer", backgroundColor: "gray" }}>
+      <tr style={{ cursor: "pointer" }}>
         <td>{(index + 1).toString().padStart(2, "0")}</td>
         <td>
           <img

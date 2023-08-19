@@ -6,6 +6,7 @@ import logo from "../../assets/store-logo.png";
 import "./style.css";
 import { Input } from "../../components/Input";
 import { api } from "../../api/request";
+import { AUTH_URL } from "../../constants";
 import { useAuthToken } from "../../hooks/useAuthToken";
 
 export interface IUser {
@@ -15,9 +16,12 @@ export interface IUser {
 }
 
 export const Signin = () => {
+  const { token } = useAuthToken();
   const navigate = useNavigate();
-  const tokenData = useAuthToken();
-  const [user, setUser] = React.useState<IUser>({ email: "", password: "" });
+  const [user, setUser] = React.useState<{ email: string; password: string }>({
+    email: "",
+    password: "",
+  });
 
   const handleChange = React.useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -26,34 +30,35 @@ export const Signin = () => {
     },
     [user]
   );
+
   useEffect(() => {
-    if (!tokenData?.token) return;
-    if (tokenData?.token) {
-      return navigate("/dashboard");
+    if (token) {
+      navigate("/dashboard?tab=");
+      return;
     }
-  }, []);
+  }, [navigate]);
 
   const handleLogin = React.useCallback(
     async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
       e.preventDefault();
 
       try {
-        const result = await api().post(
-          "https://store-reload.onrender.com/api/v1/admin/auth/login",
-          user
-        );
+        const result = await api().post(AUTH_URL + "/login", user);
         console.log("RESULT", result);
         if (result.status == 200) {
           toast.success(result.data.message);
           setUser({ ...user, email: "", password: "" });
-          window.localStorage.setItem("user", JSON.stringify(result.data.data));
-          navigate("/dashboard");
+          window.localStorage.setItem("token", result.data.data.token);
+          navigate("/dashboard?tab=");
+          return;
+        } else {
+          toast.error(result.data.message);
+          return;
         }
-        return;
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (error: any) {
-        toast.error(error?.response?.data.message);
-        console.error("ERROR", error?.response?.data.message);
+        toast.error(error.data.message);
+        console.error("ERROR: ", error.data);
         return;
       }
     },
@@ -71,7 +76,7 @@ export const Signin = () => {
         <p>
           Have not Log in before?{" "}
           <strong>
-            <Link to={"/signup"}>Sign up</Link>
+            <Link to={"/auth/signup"}>Sign up</Link>
           </strong>
         </p>
       </header>

@@ -50,14 +50,19 @@ export const Product = (props: IProps) => {
             <button
               id="general"
               style={{
-                backgroundColor: `${type === "general" && "var(--main-blue)"}`,
-                color: `${type === "general" && "white"}`,
+                backgroundColor: `${type === "general" ? "white" : ""}`,
               }}
               onClick={() => setType("general")}
             >
               Consumable goods
             </button>
-            <button id="medical" onClick={() => setType("medical")}>
+            <button
+              id="medical"
+              style={{
+                backgroundColor: `${type === "medical" ? "white" : ""}`,
+              }}
+              onClick={() => setType("medical")}
+            >
               Medicals
             </button>
           </div>

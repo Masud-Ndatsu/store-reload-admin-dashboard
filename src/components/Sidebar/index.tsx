@@ -1,16 +1,16 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "./style.css";
+import { useAuthToken } from "../../hooks/useAuthToken";
 
 export const Sidebar = () => {
-  const navigate = useNavigate();
-  const handleLogout = (): void => {
-    if (JSON.parse(window.localStorage.getItem("user") as string)?.user) {
-      window.localStorage.removeItem("user");
-      navigate("/auth/signin");
-      window.location.reload();
-      console.log("LOGOUT SUCCESSFUL");
+  const { token } = useAuthToken();
+  const handleLogout = (cb: () => void): void => {
+    if (!token) {
       return;
     }
+    window.localStorage.removeItem("token");
+    window.location.reload();
+    cb();
   };
 
   return (
@@ -41,7 +41,10 @@ export const Sidebar = () => {
         </li>
       </ul>
       <div className="logout">
-        <Link to={"/"} onClick={handleLogout}>
+        <Link
+          to={"/"}
+          onClick={() => handleLogout(() => console.log("LOGGED OUT"))}
+        >
           Log out
         </Link>
       </div>

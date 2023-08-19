@@ -1,18 +1,65 @@
-import { useEffect, useState } from "react";
+import { useRef, useState, useCallback, useEffect } from "react";
 import { FiEdit2 } from "react-icons/fi";
 import "./style.css";
 import { useAuthToken } from "../../hooks/useAuthToken";
+import { api } from "../../api/request";
+import { USER_URL } from "../../constants";
+import { useNavigate } from "react-router-dom";
+import profile from "../../assets/profile.jpg";
 
 export const Settings = () => {
-  const tokenData = useAuthToken();
+  const { token } = useAuthToken();
+  const navigate = useNavigate();
   const [avatar, setAvatar] = useState<string>("");
-  console.log(avatar);
-  useEffect(() => {
-    if (!tokenData?.token) return;
-    setAvatar(tokenData.user?.avatar as string);
-  }, []);
+  const [preview, setPreview] = useState<string>("");
+  const inputRef = useRef<HTMLInputElement>(null);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const handleInputRef = () => {
+    inputRef.current?.click();
+  };
+
+  const handleAvatarUpload = useCallback(async (e: any) => {
+    const dataString = URL.createObjectURL(e.target.files[0]);
+    setPreview(dataString);
+
+    const fd = new FormData();
+
+    for (const file of e.target.files || []) {
+      fd.append("avatar", file);
+    }
+
+    const result = await api().put(`${USER_URL}/avatar`, fd, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (result.status == 401) {
+      navigate("/auth/signin");
+    }
+    navigate("/dashboard?tab=settings");
+  }, []);
+
+  const getAvatar = useCallback(
+    async function () {
+      try {
+        const res = await api().get(`${USER_URL}/avatar`, {
+          headers: { Authorization: "Bearer " + token },
+        });
+        setAvatar(res.data.data);
+      } catch (error: any) {
+        console.log({ error });
+      }
+    },
+    [token]
+  );
+
+  useEffect(() => {
+    getAvatar();
+  }, [getAvatar]);
+
   return (
     <div>
       <h2>Settings</h2>
@@ -23,9 +70,17 @@ export const Settings = () => {
         </div>
         <div>
           <div className="image" style={{ position: "relative" }}>
-            <img src={avatar} alt="" />
+            <input
+              type="file"
+              ref={inputRef}
+              onChange={handleAvatarUpload}
+              hidden
+            />
+            <img src={avatar ? avatar : preview ?? profile} alt="" />
             {true ? (
-              <div className="edit-icon">+</div>
+              <div className="edit-icon" onClick={handleInputRef}>
+                +
+              </div>
             ) : (
               <div className="edit-icon">
                 <FiEdit2 />

@@ -6,6 +6,7 @@ import logo from "../../assets/store-logo.png";
 import "./style.css";
 import { Input } from "../../components/Input";
 import { api } from "../../api/request";
+import { AUTH_URL } from "../../constants";
 
 interface IUser {
   email: string;
@@ -26,20 +27,17 @@ export const Signup = () => {
     async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
       e.preventDefault();
       try {
-        const result = await api().post(
-          "https://store-reload.onrender.com/api/v1/admin/auth/create",
-          user
-        );
-
-        if (result.status === 200) {
+        const result = await api().post(`${AUTH_URL}/create`, user);
+        if (result.status == 200) {
           setUser({ ...user, email: "", password: "" });
           navigate("/auth/signin");
         }
+        console.log({ result });
         toast(result.data.message);
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (error: any) {
-        toast(error.response.data.message);
-        console.error("ERROR", error.response.data);
+        toast(error.data.message);
+        console.error("ERROR", error.data);
       }
     },
     [user, navigate]
@@ -57,7 +55,7 @@ export const Signup = () => {
         <p>
           Already have an account?{" "}
           <strong>
-            <Link to={"/signin"}>Sign in</Link>
+            <Link to={"/auth/signin"}>Sign in</Link>
           </strong>
         </p>
       </header>
@@ -85,7 +83,8 @@ export const Signup = () => {
               gap: "0.5rem",
               margin: "1rem 0",
               cursor: "pointer",
-            }}>
+            }}
+          >
             <strong>
               <Link to={"/forgot-password"}>forgot password</Link>
             </strong>

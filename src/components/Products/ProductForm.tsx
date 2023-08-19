@@ -13,8 +13,12 @@ interface IProps {
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+import { useNavigate } from "react-router-dom";
+import { PRODUCT_URL } from "../../constants";
+
 export const ProductForm = (props: IProps) => {
-  const user = useAuthToken();
+  const navigate = useNavigate();
+  const { token } = useAuthToken();
   const [loading, setLoading] = useState<boolean>(false);
   const [imageFiles, setImageFiles] = useState<FileList | null>({} as FileList);
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
@@ -44,8 +48,6 @@ export const ProductForm = (props: IProps) => {
     async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
       e.preventDefault();
       try {
-        if (!user?.token) return;
-        const { token } = user;
         if (
           !productName ||
           !productCategory ||
@@ -72,17 +74,13 @@ export const ProductForm = (props: IProps) => {
         formData.append("price", productPrice);
         formData.append("tags", JSON.stringify(productTags));
 
-        const result = await api().post(
-          "https://store-reload.onrender.com/api/v1/admin/product/create",
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
+        const result = await api().post(PRODUCT_URL + "/create", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            // Authorization: `Bearer ${token}`,
+          },
+        });
+        console.log({ result });
         setLoading(false);
         if (result.status == 201) {
           toast(result.data.message);
@@ -92,16 +90,21 @@ export const ProductForm = (props: IProps) => {
           setProductSize("");
           setProductType("");
           setProductTags([]);
-          window.location.reload();
+          navigate("/dashboard?tab=");
         }
-        console.log(result.data);
-        setLoading(false);
+        if (result.status == 401) {
+          // toast(result.data.message);
+          navigate("/auth/signin");
+        }
+
+        if (!result.data.status) {
+          setLoading(false);
+        }
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (error: any) {
         // console.log({ error });
-        setLoading(false);
-        toast(error?.response?.data?.message);
-        console.error("ERROR", error?.response?.data);
+        toast(error.data.message);
+        console.error("ERROR", error);
       }
     },
     [
@@ -112,7 +115,7 @@ export const ProductForm = (props: IProps) => {
       productTags,
       productType,
       productPrice,
-      user,
+      token,
       imageFiles,
     ]
   );
