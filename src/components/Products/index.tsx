@@ -16,6 +16,7 @@ export const Products = () => {
 
   const fetchProductData = useCallback(async () => {
     try {
+      if (!token) return;
       setLoading(false);
       const result = await api().get(PRODUCT_URL + "/getMany?type=" + type, {
         headers: {

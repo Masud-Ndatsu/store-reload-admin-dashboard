@@ -1,4 +1,4 @@
-import { useRef, useState, useCallback, useEffect } from "react";
+import { useRef, useState, useCallback } from "react";
 import { FiEdit2 } from "react-icons/fi";
 import "./style.css";
 import { useAuthToken } from "../../hooks/useAuthToken";
@@ -6,11 +6,12 @@ import { api } from "../../api/request";
 import { USER_URL } from "../../constants";
 import { useNavigate } from "react-router-dom";
 import profile from "../../assets/profile.jpg";
+import { useAvatar } from "../../hooks/useAvatar";
 
 export const Settings = () => {
   const { token } = useAuthToken();
   const navigate = useNavigate();
-  const [avatar, setAvatar] = useState<string>("");
+  const { avatar } = useAvatar();
   const [preview, setPreview] = useState<string>("");
   const inputRef = useRef<HTMLInputElement>(null);
   const [email, setEmail] = useState("");
@@ -41,24 +42,6 @@ export const Settings = () => {
     }
     navigate("/dashboard?tab=settings");
   }, []);
-
-  const getAvatar = useCallback(
-    async function () {
-      try {
-        const res = await api().get(`${USER_URL}/avatar`, {
-          headers: { Authorization: "Bearer " + token },
-        });
-        setAvatar(res.data.data);
-      } catch (error: any) {
-        console.log({ error });
-      }
-    },
-    [token]
-  );
-
-  useEffect(() => {
-    getAvatar();
-  }, [getAvatar]);
 
   return (
     <div>

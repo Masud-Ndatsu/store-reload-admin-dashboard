@@ -1,16 +1,16 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./style.css";
 import { useAuthToken } from "../../hooks/useAuthToken";
 
 export const Sidebar = () => {
+  const navigate = useNavigate();
   const { token } = useAuthToken();
   const handleLogout = (cb: () => void): void => {
-    if (!token) {
-      return;
+    if (token) {
+      window.localStorage.removeItem("token");
+      navigate("/auth/signin");
+      cb();
     }
-    window.localStorage.removeItem("token");
-    window.location.reload();
-    cb();
   };
 
   return (

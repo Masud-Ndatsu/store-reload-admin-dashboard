@@ -5,6 +5,7 @@ import { Input } from "../../components/Input";
 import { Link } from "react-router-dom";
 import { api } from "../../api/request";
 import logo from "../../assets/store-logo.png";
+import { AUTH_URL } from "../../constants";
 
 export const ForgotPassword = () => {
   const [email, setEmail] = React.useState<string>("");
@@ -20,10 +21,9 @@ export const ForgotPassword = () => {
       e.preventDefault();
 
       try {
-        const result = await api().post(
-          "https://store-reload.onrender.com/api/v1/auth/admin/forgot-password",
-          { email }
-        );
+        const result = await api().post(AUTH_URL + "/forgot-password", {
+          email,
+        });
         console.log(result);
 
         if (result.status === 200) {
@@ -67,7 +67,8 @@ export const ForgotPassword = () => {
               gap: "0.5rem",
               margin: "1rem 0",
               cursor: "pointer",
-            }}>
+            }}
+          >
             <input type="checkbox" id="checkbox" />
             <label htmlFor="checkbox">Remember me</label>
           </div>

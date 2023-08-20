@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -7,7 +7,6 @@ import "./style.css";
 import { Input } from "../../components/Input";
 import { api } from "../../api/request";
 import { AUTH_URL } from "../../constants";
-import { useAuthToken } from "../../hooks/useAuthToken";
 
 export interface IUser {
   email: string;
@@ -16,7 +15,6 @@ export interface IUser {
 }
 
 export const Signin = () => {
-  const { token } = useAuthToken();
   const navigate = useNavigate();
   const [user, setUser] = React.useState<{ email: string; password: string }>({
     email: "",
@@ -31,25 +29,16 @@ export const Signin = () => {
     [user]
   );
 
-  useEffect(() => {
-    if (token) {
-      navigate("/dashboard?tab=");
-      return;
-    }
-  }, [navigate]);
-
   const handleLogin = React.useCallback(
     async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
       e.preventDefault();
-
       try {
         const result = await api().post(AUTH_URL + "/login", user);
-        console.log("RESULT", result);
         if (result.status == 200) {
           toast.success(result.data.message);
           setUser({ ...user, email: "", password: "" });
           window.localStorage.setItem("token", result.data.data.token);
-          navigate("/dashboard?tab=");
+          navigate("/dashboard");
           return;
         } else {
           toast.error(result.data.message);

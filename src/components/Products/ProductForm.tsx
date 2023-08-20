@@ -77,7 +77,7 @@ export const ProductForm = (props: IProps) => {
         const result = await api().post(PRODUCT_URL + "/create", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
-            // Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
           },
         });
         console.log({ result });
@@ -90,7 +90,7 @@ export const ProductForm = (props: IProps) => {
           setProductSize("");
           setProductType("");
           setProductTags([]);
-          navigate("/dashboard?tab=");
+          navigate("/dashboard");
         }
         if (result.status == 401) {
           // toast(result.data.message);

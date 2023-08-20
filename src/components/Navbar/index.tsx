@@ -3,32 +3,10 @@ import { IoIosNotificationsOutline } from "react-icons/io";
 import { BsEnvelope } from "react-icons/bs";
 import "./style.css";
 import logo from "../../assets/image4.jpg";
-import { useCallback, useEffect, useState } from "react";
-import { USER_URL } from "../../constants";
-import { useAuthToken } from "../../hooks/useAuthToken";
-import { api } from "../../api/request";
+import { useAvatar } from "../../hooks/useAvatar";
 
 export const Navbar = (): JSX.Element => {
-  const { token } = useAuthToken();
-  const [avatar, setAvatar] = useState<string>("");
-  const getAvatar = useCallback(
-    async function () {
-      try {
-        const res = await api().get(`${USER_URL}/avatar`, {
-          headers: { Authorization: "Bearer " + token },
-        });
-        setAvatar(res.data.data);
-      } catch (error: any) {
-        console.log({ error });
-      }
-    },
-    [token]
-  );
-
-  useEffect(() => {
-    getAvatar();
-  }, [getAvatar]);
-
+  const { avatar } = useAvatar();
   const today = new Date();
   const formattedDate = today.toLocaleDateString("en-US", {
     day: "2-digit",

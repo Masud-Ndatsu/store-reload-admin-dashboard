@@ -5,6 +5,7 @@ import { Input } from "../../components/Input";
 import { Link, useNavigate } from "react-router-dom";
 import { api } from "../../api/request";
 import logo from "../../assets/store-logo.png";
+import { AUTH_URL } from "../../constants";
 
 export const NewPassword = () => {
   const navigate = useNavigate();
@@ -24,7 +25,7 @@ export const NewPassword = () => {
 
       try {
         const result = await api().post(
-          "https://store-reload.onrender.com/api/v1/admin/auth/new-password",
+          AUTH_URL + "/new-password",
           { password, userId, token },
           {
             headers: {
@@ -77,7 +78,8 @@ export const NewPassword = () => {
               gap: "0.5rem",
               margin: "1rem 0",
               cursor: "pointer",
-            }}>
+            }}
+          >
             <input type="checkbox" id="checkbox" />
             <label htmlFor="checkbox">Remember me</label>
           </div>

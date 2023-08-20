@@ -5,14 +5,17 @@ import { ForgotPassword } from "./pages/forgotpassword";
 import { ResetPassword } from "./pages/resetpassword";
 import { NewPassword } from "./pages/newpassword";
 import { Dashboard } from "./pages/dashboard";
+import { ProtectedRoute } from "./components/ProtectedRoute";
 
 function App() {
   return (
     <>
       <Router>
         <Routes>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="/" element={<ProtectedRoute />}>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="dashboard" element={<Dashboard />} />
+          </Route>
           <Route path="auth/signin" element={<Signin />} />
           <Route path="auth/signup" element={<Signup />} />
           <Route path="auth/forgot-password" element={<ForgotPassword />} />
