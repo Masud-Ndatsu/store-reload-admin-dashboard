@@ -37,10 +37,13 @@ export const Settings = () => {
         Authorization: `Bearer ${token}`,
       },
     });
+
+    if (result.status == 200) {
+      navigate("/dashboard");
+    }
     if (result.status == 401) {
       navigate("/auth/signin");
     }
-    navigate("/dashboard?tab=settings");
   }, []);
 
   return (

@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import { Modal } from "../Modal";
 import { IoIosAdd } from "react-icons/io";
@@ -7,14 +7,13 @@ import { api } from "../../api/request";
 import { useAuthToken } from "../../hooks/useAuthToken";
 import { ProductTag } from "../ProductTag";
 import Loading from "../Loading";
+import { useNavigate } from "react-router-dom";
+import { PRODUCT_URL } from "../../constants";
 
 interface IProps {
   showModal: boolean;
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
-
-import { useNavigate } from "react-router-dom";
-import { PRODUCT_URL } from "../../constants";
 
 export const ProductForm = (props: IProps) => {
   const navigate = useNavigate();
@@ -80,7 +79,6 @@ export const ProductForm = (props: IProps) => {
             Authorization: `Bearer ${token}`,
           },
         });
-        console.log({ result });
         setLoading(false);
         if (result.status == 201) {
           toast(result.data.message);
@@ -93,7 +91,6 @@ export const ProductForm = (props: IProps) => {
           navigate("/dashboard");
         }
         if (result.status == 401) {
-          // toast(result.data.message);
           navigate("/auth/signin");
         }
 
