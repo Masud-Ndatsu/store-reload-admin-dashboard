@@ -1,3 +1,6 @@
+import { AreaChart } from "../Charts/AreaChart";
+import { BarChart } from "../Charts/BarChart";
+import { PieChart } from "../Charts/PieChart";
 import "./style.css";
 
 export const SalesAnalytics = () => {
@@ -7,7 +10,8 @@ export const SalesAnalytics = () => {
 
       <article
         className="header"
-        style={{ display: "flex", justifyContent: "space-between" }}>
+        style={{ display: "flex", justifyContent: "space-between" }}
+      >
         <div className="card">
           <div>
             <p>Customers</p>
@@ -31,10 +35,22 @@ export const SalesAnalytics = () => {
         </div>
       </article>
       <article className="content-grid">
-        <div>One</div>
-        <div>Two</div>
-        <div>Three</div>
-        <div>Four</div>
+        <div>
+          <h3>Daily sales</h3>
+          <AreaChart />
+        </div>
+        <div>
+          <h3>Previous monthly sales</h3>
+          <PieChart />
+        </div>
+        <div>
+          <h3>App usage trafic</h3>
+          <AreaChart />
+        </div>
+        <div>
+          <h3>App download trafic</h3>
+          <BarChart />
+        </div>
       </article>
     </div>
   );

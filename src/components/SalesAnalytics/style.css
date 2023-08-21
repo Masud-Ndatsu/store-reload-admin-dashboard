@@ -30,10 +30,14 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
+  overflow-y: scroll;
+  border: 1px solid #ccc;
+  height: 420px;
+  padding: 5px;
 }
 
 .analytics-wrapper .content-grid div {
-  height: 180px;
+  min-height: 250px;
   padding: 1rem;
   border: 1px solid #ccc;
   border-radius: 5px;
