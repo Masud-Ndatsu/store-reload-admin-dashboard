@@ -25,7 +25,7 @@ export const CustomersInfo = () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       setLoading(false);
-      console.error("ERROR: ", error?.response?.data);
+      console.error("ERROR: ", error?.data);
     }
   }, [token]);
 

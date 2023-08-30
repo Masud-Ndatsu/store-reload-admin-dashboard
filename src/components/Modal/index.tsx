@@ -6,15 +6,16 @@ type Props = {
   isOpen: boolean;
   onClose: React.MouseEventHandler<HTMLButtonElement>;
   children: React.ReactNode;
+  style?: React.CSSProperties;
 };
 
-export const Modal = ({ isOpen, onClose, children }: Props) => {
+export const Modal = ({ isOpen, onClose, children, style }: Props) => {
   if (!isOpen) return null;
 
   return ReactDOM.createPortal(
     <div>
       <div className="modal-overlay">
-        <div className="modal">
+        <div className="modal" style={style}>
           <button className="modal-close" onClick={onClose}>
             Close
           </button>

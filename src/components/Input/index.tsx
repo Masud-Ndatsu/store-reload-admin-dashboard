@@ -7,14 +7,22 @@ type Props = {
   handleChange: React.ChangeEventHandler<HTMLInputElement>;
   value: string;
   name: string;
+  inputStyle?: React.CSSProperties;
+  labelStyle?: React.CSSProperties;
 };
 
 export const Input = (props: Props) => {
   return (
-    <div>
+    <div style={{ margin: "1.5rem 0" }}>
       <label
-        style={{ display: "block", margin: "0.35rem 0" }}
-        htmlFor={props.type}>
+        style={{
+          display: "block",
+          margin: "0.35rem 0",
+          fontSize: "18px",
+          ...props.labelStyle,
+        }}
+        htmlFor={props.type}
+      >
         {props.label}
       </label>
       <input
@@ -23,6 +31,7 @@ export const Input = (props: Props) => {
         onChange={props.handleChange}
         name={props.name}
         value={props.value}
+        style={props.inputStyle}
       />
     </div>
   );
