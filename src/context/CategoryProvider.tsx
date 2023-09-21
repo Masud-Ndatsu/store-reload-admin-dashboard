@@ -2,6 +2,7 @@ import React, { useCallback, useContext, useEffect, useState } from "react";
 import { CATEGORY_URL } from "../constants";
 import { api } from "../api/request";
 import { useAuthToken } from "../hooks/useAuthToken";
+import { useProductData } from "./ProductProvider";
 
 interface ICategory {
     _id: string;
@@ -42,7 +43,7 @@ export const CategoryProvider = ({ children }: IProps) => {
         } catch (error: any) {
             console.log("error:", error);
         }
-    }, [token]);
+    }, []);
 
     useEffect(() => {
         getCategories();

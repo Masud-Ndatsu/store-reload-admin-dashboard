@@ -119,7 +119,7 @@ export const ProductForm = React.memo(function ProductForm(props: IProps) {
     );
 
     const filteredtCategories = useMemo(
-        () => [...categories].filter((c) => c.productType.toLowerCase() === type.toLowerCase()),
+        () => [...categories]?.filter((c) => c.productType.toLowerCase() === type.toLowerCase()),
         [categories, type]
     );
 
@@ -244,7 +244,6 @@ export const ProductForm = React.memo(function ProductForm(props: IProps) {
         handleSubmit,
         productCategory,
         categories,
-        type,
         productName,
         productDescription,
         productSize,
