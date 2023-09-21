@@ -6,13 +6,15 @@ import { api } from "../../api/request";
 import { USER_URL } from "../../constants";
 import { useNavigate } from "react-router-dom";
 import profile from "../../assets/profile.jpg";
-import { useAvatar } from "../../hooks/useAvatar";
+import { useProfileData } from "../../context/ProfileProvider";
+import Loading from "../Loading";
 
 export const Settings = () => {
   const { token } = useAuthToken();
   const navigate = useNavigate();
-  const { avatar } = useAvatar();
+  const { avatar, getAvatar } = useProfileData();
   const [preview, setPreview] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -22,27 +24,29 @@ export const Settings = () => {
   };
 
   const handleAvatarUpload = useCallback(async (e: any) => {
-    const dataString = URL.createObjectURL(e.target.files[0]);
-    setPreview(dataString);
+    try {
+      const dataString = URL.createObjectURL(e.target.files[0]);
+      setPreview(dataString);
 
-    const fd = new FormData();
+      const fd = new FormData();
 
-    for (const file of e.target.files || []) {
-      fd.append("avatar", file);
-    }
-
-    const result = await api().put(`${USER_URL}/avatar`, fd, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    if (result.status == 200) {
-      navigate("/dashboard");
-    }
-    if (result.status == 401) {
-      navigate("/auth/signin");
+      for (const file of e.target.files || []) {
+        fd.append("avatar", file);
+      }
+      setLoading(true);
+      const result = await api().put(`${USER_URL}/avatar`, fd, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setLoading(false);
+      if (result.status == 200) {
+        getAvatar();
+      }
+    } catch (error: any) {
+      setLoading(false);
+      console.log({ error });
     }
   }, []);
 
@@ -62,7 +66,11 @@ export const Settings = () => {
               onChange={handleAvatarUpload}
               hidden
             />
-            <img src={avatar ? avatar : preview ?? profile} alt="" />
+            {loading ? (
+              <Loading />
+            ) : (
+              <img src={avatar ? avatar : preview ?? profile} alt="" />
+            )}
             {true ? (
               <div className="edit-icon" onClick={handleInputRef}>
                 +

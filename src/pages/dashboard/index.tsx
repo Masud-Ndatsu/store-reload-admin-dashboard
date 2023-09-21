@@ -4,6 +4,7 @@ import { Content } from "../../components/Content";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthToken } from "../../hooks/useAuthToken";
+import { CategoryProvider } from "../../context/CategoryProvider";
 
 export const Dashboard = () => {
   const { token } = useAuthToken();
@@ -16,9 +17,11 @@ export const Dashboard = () => {
   }, [navigate]);
 
   return (
-    <main className="dashboard-wrapper">
-      <Sidebar />
-      <Content />
-    </main>
+    <CategoryProvider>
+      <main className="dashboard-wrapper">
+        <Sidebar />
+        <Content />
+      </main>
+    </CategoryProvider>
   );
 };

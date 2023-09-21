@@ -8,6 +8,7 @@ import { CustomerSupport } from "../CustomerSupport";
 import { Settings } from "../Settings";
 import { Notifications } from "../Notifications";
 import { Products } from "../Products";
+import { ProfileProvider } from "../../context/ProfileProvider";
 
 enum ITab {
   products = "products",
@@ -56,9 +57,11 @@ export const Content = () => {
     }
   }, [tab]);
   return (
-    <div className="content" style={{ overflowY: "scroll" }}>
-      <Navbar />
-      {activeTab}
-    </div>
+    <ProfileProvider>
+      <div className="content" style={{ overflowY: "scroll" }}>
+        <Navbar />
+        {activeTab}
+      </div>
+    </ProfileProvider>
   );
 };

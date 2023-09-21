@@ -3,10 +3,10 @@ import { IoIosNotificationsOutline } from "react-icons/io";
 import { BsEnvelope } from "react-icons/bs";
 import "./style.css";
 import logo from "../../assets/image4.jpg";
-import { useAvatar } from "../../hooks/useAvatar";
+import { useProfileData } from "../../context/ProfileProvider";
 
 export const Navbar = (): JSX.Element => {
-  const { avatar } = useAvatar();
+  const { avatar } = useProfileData();
   const today = new Date();
   const formattedDate = today.toLocaleDateString("en-US", {
     day: "2-digit",
