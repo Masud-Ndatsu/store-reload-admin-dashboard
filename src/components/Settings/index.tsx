@@ -4,113 +4,102 @@ import "./style.css";
 import { useAuthToken } from "../../hooks/useAuthToken";
 import { api } from "../../api/request";
 import { USER_URL } from "../../constants";
-import { useNavigate } from "react-router-dom";
 import profile from "../../assets/profile.jpg";
 import { useProfileData } from "../../context/ProfileProvider";
 import Loading from "../Loading";
 
 export const Settings = () => {
-  const { token } = useAuthToken();
-  const navigate = useNavigate();
-  const { avatar, getAvatar } = useProfileData();
-  const [preview, setPreview] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(false);
-  const inputRef = useRef<HTMLInputElement>(null);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+    const { token } = useAuthToken();
+    const { avatar, getAvatar } = useProfileData();
+    const [preview, setPreview] = useState<string>("");
+    const [loading, setLoading] = useState<boolean>(false);
+    const inputRef = useRef<HTMLInputElement>(null);
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
 
-  const handleInputRef = () => {
-    inputRef.current?.click();
-  };
+    const handleInputRef = () => {
+        inputRef.current?.click();
+    };
 
-  const handleAvatarUpload = useCallback(async (e: any) => {
-    try {
-      const dataString = URL.createObjectURL(e.target.files[0]);
-      setPreview(dataString);
+    const handleAvatarUpload = useCallback(async (e: any) => {
+        try {
+            const dataString = URL.createObjectURL(e.target.files[0]);
+            setPreview(dataString);
 
-      const fd = new FormData();
+            const fd = new FormData();
 
-      for (const file of e.target.files || []) {
-        fd.append("avatar", file);
-      }
-      setLoading(true);
-      const result = await api().put(`${USER_URL}/avatar`, fd, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setLoading(false);
-      if (result.status == 200) {
-        getAvatar();
-      }
-    } catch (error: any) {
-      setLoading(false);
-      console.log({ error });
-    }
-  }, []);
+            for (const file of e.target.files || []) {
+                fd.append("avatar", file);
+            }
+            setLoading(true);
+            const result = await api().put(`${USER_URL}/avatar`, fd, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            setLoading(false);
+            if (result.status == 200) {
+                getAvatar();
+            }
+        } catch (error: any) {
+            setLoading(false);
+            console.log({ error });
+        }
+    }, []);
 
-  return (
-    <div>
-      <h2>Settings</h2>
-
-      <div className="admin-settings">
-        <div className="tabs">
-          <h4>My Profile</h4>
-        </div>
+    return (
         <div>
-          <div className="image" style={{ position: "relative" }}>
-            <input
-              type="file"
-              ref={inputRef}
-              onChange={handleAvatarUpload}
-              hidden
-            />
-            {loading ? (
-              <Loading />
-            ) : (
-              <img src={avatar ? avatar : preview ?? profile} alt="" />
-            )}
-            {true ? (
-              <div className="edit-icon" onClick={handleInputRef}>
-                +
-              </div>
-            ) : (
-              <div className="edit-icon">
-                <FiEdit2 />
-              </div>
-            )}
-          </div>
-          <form action="">
-            <div>
-              <label htmlFor="email">Enter your email</label>
-              <div className="input-wrapper">
-                <input
-                  type="text"
-                  name="email"
-                  value={email}
-                  placeholder="mrjude@gmail.com"
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-                <FiEdit2 />
-              </div>
+            <h2>Settings</h2>
+
+            <div className="admin-settings">
+                <div className="tabs">
+                    <h4>My Profile</h4>
+                </div>
+                <div>
+                    <div className="image" style={{ position: "relative" }}>
+                        <input type="file" ref={inputRef} onChange={handleAvatarUpload} hidden />
+                        {loading ? <Loading /> : <img src={avatar ? avatar : preview ?? profile} alt="" />}
+                        {true ? (
+                            <div className="edit-icon" onClick={handleInputRef}>
+                                +
+                            </div>
+                        ) : (
+                            <div className="edit-icon">
+                                <FiEdit2 />
+                            </div>
+                        )}
+                    </div>
+                    <form action="">
+                        <div>
+                            <label htmlFor="email">Enter your email</label>
+                            <div className="input-wrapper">
+                                <input
+                                    type="text"
+                                    name="email"
+                                    value={email}
+                                    placeholder="mrjude@gmail.com"
+                                    onChange={(e) => setEmail(e.target.value)}
+                                />
+                                <FiEdit2 />
+                            </div>
+                        </div>
+                        <div>
+                            <label htmlFor="password">Enter your password</label>
+                            <div className="input-wrapper">
+                                <input
+                                    type="text"
+                                    name="password"
+                                    value={password}
+                                    placeholder="Storereload"
+                                    onChange={(e) => setPassword(e.target.value)}
+                                />
+                                <FiEdit2 />
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div>
-              <label htmlFor="password">Enter your password</label>
-              <div className="input-wrapper">
-                <input
-                  type="text"
-                  name="password"
-                  value={password}
-                  placeholder="Storereload"
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-                <FiEdit2 />
-              </div>
-            </div>
-          </form>
         </div>
-      </div>
-    </div>
-  );
+    );
 };
