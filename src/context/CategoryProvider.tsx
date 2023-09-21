@@ -2,7 +2,6 @@ import React, { useCallback, useContext, useEffect, useState } from "react";
 import { CATEGORY_URL } from "../constants";
 import { api } from "../api/request";
 import { useAuthToken } from "../hooks/useAuthToken";
-import { useProductData } from "./ProductProvider";
 
 interface ICategory {
     _id: string;
