@@ -33,7 +33,7 @@ export const CategoryProvider = ({ children }: IProps) => {
 
     const getCategories = useCallback(async () => {
         try {
-            const res = await api().get(CATEGORY_URL + "/getMany", {
+            const res = await api().get(CATEGORY_URL + "/", {
                 headers: {
                     Authorization: "Bearer " + token,
                 },

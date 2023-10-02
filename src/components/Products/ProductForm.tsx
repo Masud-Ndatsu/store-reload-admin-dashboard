@@ -22,7 +22,6 @@ export const ProductForm = React.memo(function ProductForm(props: IProps) {
     const { token } = useAuthToken();
     const { setRefresh, type } = useProductData();
     const { categories } = useCategoryData();
-    // const [cat, setCat] = useState(() => categories);
     const [loading, setLoading] = useState<boolean>(false);
     const [imageFiles, setImageFiles] = useState<FileList | null>({} as FileList);
     const [imagePreviews, setImagePreviews] = useState<string[]>([]);
@@ -251,10 +250,6 @@ export const ProductForm = React.memo(function ProductForm(props: IProps) {
         productTags,
         productType,
     ]);
-
-    console.log("------------------------------------------------");
-    console.log("categories", categories);
-    console.log("------------------------------------------------");
 
     return (
         <>

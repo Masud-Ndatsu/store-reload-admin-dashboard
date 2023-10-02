@@ -39,15 +39,15 @@ export const ProductProvider: React.FC<IProductProvider> = ({ children }) => {
     const fetchProductData = useCallback(async () => {
         try {
             setLoading(true); // Set loading to true when starting the request
-            const result = await api().get(`${PRODUCT_URL}/getMany?type=${type}`, {
+            const result = await api().get(`${PRODUCT_URL}/?type=${type}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
             });
 
             setLoading(false); // Set loading to false when the request is complete
-            setProductLength(result?.data.data.totalPages);
-            setProducts(result?.data.data.products);
+            setProductLength(result?.data.data.length);
+            setProducts(result?.data.data);
         } catch (error: any) {
             setLoading(false); // Set loading to false in case of an error
             console.error("ERROR: ", error);
