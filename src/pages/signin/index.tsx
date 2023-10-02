@@ -37,13 +37,13 @@ export const Signin = () => {
                 setLoading(true);
                 const result = await api().post(AUTH_URL + "/login", user);
                 setLoading(false);
-
+                console.log(result);
                 if (result.status == 200) {
                     setUser({ ...user, email: "", password: "" });
                     window.localStorage.setItem("token", result.data.data.token);
                     navigate("/dashboard");
-                    return;
                 }
+                return;
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
             } catch (error: any) {
                 setLoading(false);
