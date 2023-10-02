@@ -18,6 +18,7 @@ export const CustomersInfo = () => {
                 },
             });
             setLoading(true);
+
             setCustomers(result.data.data);
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
