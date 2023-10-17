@@ -1,50 +1,61 @@
-import { createContext, useCallback, useContext, useEffect, useState } from "react";
+import {
+     createContext,
+     useCallback,
+     useContext,
+     useEffect,
+     useState,
+} from "react";
 import { useAuthToken } from "../hooks/useAuthToken";
 import { api } from "../api/request";
 import { USER_URL } from "../constants";
 
 interface IContext {
-    avatar: string;
-    getAvatar: () => Promise<void>;
+     user: any;
+     getUser: () => Promise<void>;
 }
 
 interface IProfileProvider {
-    children: React.ReactNode;
+     children: React.ReactNode;
 }
 
 const ProfileContext = createContext<IContext>({
-    avatar: "http://res.cloudinary.com/masudnda/image/upload/v1692392737/storereload/gsdryxexmtzgr0ioe9nx.png",
-    getAvatar: async () => {},
+     user: "http://res.cloudinary.com/masudnda/image/upload/v1692392737/storereload/gsdryxexmtzgr0ioe9nx.png",
+     getUser: async () => {},
 });
 
 export const ProfileProvider = ({ children }: IProfileProvider) => {
-    const { token } = useAuthToken();
-    const [avatar, setAvatar] = useState<string>("");
+     const { token } = useAuthToken();
+     const [user, setUser] = useState<string>("");
 
-    const getAvatar = useCallback(async function () {
-        if (!token) return;
-        try {
-            const res = await api().get(`${USER_URL}/avatar`, {
-                headers: { Authorization: "Bearer " + token },
-            });
-            setAvatar(res.data.data);
-        } catch (error: any) {
-            console.log({ error });
-        }
-    }, []);
+     const getUser = useCallback(async function () {
+          if (!token) return;
+          try {
+               const res = await api().get(`${USER_URL}/me`, {
+                    headers: { Authorization: "Bearer " + token },
+               });
+               console.log("response : ", res.data);
+               setUser(res.data.data);
+          } catch (error: any) {
+               console.log({ error });
+          }
+     }, []);
 
-    useEffect(() => {
-        getAvatar();
-    }, [getAvatar]);
+     useEffect(() => {
+          getUser();
+     }, [getUser]);
 
-    const values: IContext = {
-        avatar,
-        getAvatar,
-    };
+     const values: IContext = {
+          user,
+          getUser,
+     };
 
-    return <ProfileContext.Provider value={values}>{children}</ProfileContext.Provider>;
+     return (
+          <ProfileContext.Provider value={values}>
+               {children}
+          </ProfileContext.Provider>
+     );
 };
 
 export const useProfileData = () => {
-    return useContext(ProfileContext);
+     return useContext(ProfileContext);
 };
