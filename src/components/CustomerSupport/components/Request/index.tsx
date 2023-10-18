@@ -1,18 +1,49 @@
+import { useCallback, useEffect, useState } from "react";
 import { SlOptionsVertical } from "react-icons/sl";
+import { api } from "../../../../api/request";
+import { USER_URL } from "../../../../constants";
+import { useAuthToken } from "../../../../hooks/useAuthToken";
 
 const Request = () => {
-  return (
-    <tr style={{ cursor: "pointer" }}>
-      <td>01</td>
-      <td>Storereload</td>
-      <td>Lorem ipsum dolor sit amet consectetur adipisicing elit.</td>
-      <td>New</td>
-      <td>13/07/2023</td>
-      <td>
-        <SlOptionsVertical />
-      </td>
-    </tr>
-  );
+     const { token } = useAuthToken();
+     const [supports, setSupports] = useState<any[]>([]);
+
+     const getSupportMessages = useCallback(async () => {
+          try {
+               const result = await api().get(`${USER_URL}/messages`, {
+                    headers: {
+                         Authorization: `Bearer ${token}`,
+                    },
+               });
+               setSupports(result.data.data);
+          } catch (error) {
+               console.log("error", error);
+          }
+     }, []);
+
+     useEffect(() => {
+          getSupportMessages();
+     }, [getSupportMessages]);
+
+     return (
+          <>
+               {supports.map((support, index) => {
+                    const date = new Date(support.createdAt);
+                    return (
+                         <tr style={{ cursor: "pointer" }} key={support?._id}>
+                              <td>{(index + 1).toString().padStart(2, "0")}</td>
+                              <td>{support.user?.shop[0].shop_name}</td>
+                              <td>{support?.message}</td>
+                              <td>New</td>
+                              <td>{date.toLocaleString()}</td>
+                              <td>
+                                   <SlOptionsVertical />
+                              </td>
+                         </tr>
+                    );
+               })}
+          </>
+     );
 };
 
 export default Request;
