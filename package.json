@@ -11,10 +11,13 @@
   },
   "dependencies": {
     "@types/faker": "5.5.9",
+    "apexcharts": "^3.43.2-0",
     "axios": "^1.4.0",
     "chart.js": "^4.3.3",
+    "dayjs": "^1.11.10",
     "faker": "5.5.3",
     "react": "^18.2.0",
+    "react-apexcharts": "^1.4.1",
     "react-chartjs-2": "^5.2.0",
     "react-charts": "^3.0.0-beta.55",
     "react-dom": "^18.2.0",

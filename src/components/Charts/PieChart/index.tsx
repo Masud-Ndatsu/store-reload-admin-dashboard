@@ -1,41 +1,61 @@
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
-import { Pie } from "react-chartjs-2";
+import React, { useState } from "react";
+import ReactApexChart from "react-apexcharts";
 
-ChartJS.register(ArcElement, Tooltip, Legend);
-
-const options = {
-  responsive: true,
-  plugins: {
-    legend: {
-      position: "top" as const,
-    },
-  },
-};
-
-const data = {
-  labels: ["Red", "Blue", "Yellow", "Green"],
-  datasets: [
-    {
-      fill: true,
-      label: "# of Votes",
-      data: [12, 19, 3, 5],
-      backgroundColor: [
-        "rgba(255, 99, 132, 0.2)",
-        "rgba(54, 162, 235, 0.2)",
-        "rgba(255, 206, 86, 0.2)",
-        "rgba(75, 192, 192, 0.2)",
-      ],
-      borderColor: [
-        "rgba(255, 99, 132, 1)",
-        "rgba(54, 162, 235, 1)",
-        "rgba(255, 206, 86, 1)",
-        "rgba(75, 192, 192, 1)",
-      ],
-      borderWidth: 1,
-    },
-  ],
-};
-
-export function PieChart() {
-  return <Pie data={data} options={options} />;
+interface PieChartProps {
+     series: number[];
+     options: {
+          chart: {
+               width: number;
+               type: string;
+          };
+          labels: string[];
+          responsive: {
+               breakpoint: number;
+               options: {
+                    chart: {
+                         width: number;
+                    };
+                    legend: {
+                         position: string;
+                    };
+               };
+          }[];
+     };
 }
+
+export const PieChart: React.FC<PieChartProps> = () => {
+     const [state, _setState] = useState<PieChartProps>({
+          series: [44, 55, 13, 43, 22],
+          options: {
+               chart: {
+                    width: 380,
+                    type: "pie",
+               },
+               labels: ["Team A", "Team B", "Team C", "Team D", "Team E"],
+               responsive: [
+                    {
+                         breakpoint: 480,
+                         options: {
+                              chart: {
+                                   width: 200,
+                              },
+                              legend: {
+                                   position: "bottom",
+                              },
+                         },
+                    },
+               ],
+          },
+     });
+
+     return (
+          <div id="chart">
+               <ReactApexChart
+                    options={state.options as any}
+                    series={state.series}
+                    type="pie"
+                    width={380}
+               />
+          </div>
+     );
+};

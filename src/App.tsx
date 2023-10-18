@@ -8,23 +8,32 @@ import { Dashboard } from "./pages/dashboard";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 
 function App() {
-  return (
-    <>
-      <Router>
-        <Routes>
-          <Route path="/" element={<ProtectedRoute />}>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="dashboard" element={<Dashboard />} />
-          </Route>
-          <Route path="auth/signin" element={<Signin />} />
-          <Route path="auth/signup" element={<Signup />} />
-          <Route path="auth/forgot-password" element={<ForgotPassword />} />
-          <Route path="auth/reset-password" element={<ResetPassword />} />
-          <Route path="auth/change-password" element={<NewPassword />} />
-        </Routes>
-      </Router>
-    </>
-  );
+     return (
+          <>
+               <Router>
+                    <Routes>
+                         <Route path="/" element={<ProtectedRoute />}>
+                              <Route path="/" element={<Dashboard />} />
+                              <Route path="dashboard" element={<Dashboard />} />
+                         </Route>
+                         <Route path="auth/signin" element={<Signin />} />
+                         <Route path="auth/signup" element={<Signup />} />
+                         <Route
+                              path="auth/forgot-password"
+                              element={<ForgotPassword />}
+                         />
+                         <Route
+                              path="auth/reset-password"
+                              element={<ResetPassword />}
+                         />
+                         <Route
+                              path="auth/change-password"
+                              element={<NewPassword />}
+                         />
+                    </Routes>
+               </Router>
+          </>
+     );
 }
 
 export default App;
