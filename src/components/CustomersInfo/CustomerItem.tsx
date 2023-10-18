@@ -1,5 +1,4 @@
 import React from "react";
-import { ICustomer } from "./types";
 
 interface IProps {
      customer: any;
