@@ -7,6 +7,7 @@ import { useAuthToken } from "../../../../hooks/useAuthToken";
 const Request = () => {
      const { token } = useAuthToken();
      const [supports, setSupports] = useState<any[]>([]);
+     const [toolTip, setToolTip] = useState<boolean>(false);
 
      const getSupportMessages = useCallback(async () => {
           try {
@@ -36,8 +37,37 @@ const Request = () => {
                               <td>{support?.message}</td>
                               <td>New</td>
                               <td>{date.toLocaleString()}</td>
-                              <td>
-                                   <SlOptionsVertical />
+                              <td style={{ position: "relative" }}>
+                                   <SlOptionsVertical
+                                        height={"100%"}
+                                        width={"100%"}
+                                        onClick={() => setToolTip(!toolTip)}
+                                   />
+
+                                   {toolTip && (
+                                        <ul
+                                             style={{
+                                                  position: "absolute",
+                                                  backgroundColor: "whitesmoke",
+                                                  listStyle: "none",
+                                             }}
+                                        >
+                                             <li
+                                                  style={{
+                                                       padding: ".75rem 1rem",
+                                                  }}
+                                             >
+                                                  Read
+                                             </li>
+                                             <li
+                                                  style={{
+                                                       padding: ".75rem 1rem",
+                                                  }}
+                                             >
+                                                  Delete
+                                             </li>
+                                        </ul>
+                                   )}
                               </td>
                          </tr>
                     );
