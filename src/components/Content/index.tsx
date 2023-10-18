@@ -3,7 +3,7 @@ import { Navbar } from "../Navbar";
 import "./style.css";
 import { useLocation } from "react-router-dom";
 import { CustomersInfo } from "../CustomersInfo";
-// import { SalesAnalytics } from "../SalesAnalytics";
+import { SalesAnalytics } from "../SalesAnalytics";
 import { CustomerSupport } from "../CustomerSupport";
 import { Settings } from "../Settings";
 import { Notifications } from "../Notifications";
@@ -38,7 +38,7 @@ export const Content = () => {
                     setActiveTab(<Products />);
                     break;
                case ITab.sales_report:
-                    // setActiveTab(<SalesAnalytics />);
+                    setActiveTab(<SalesAnalytics />);
                     break;
                case ITab.customers_info:
                     setActiveTab(<CustomersInfo />);
