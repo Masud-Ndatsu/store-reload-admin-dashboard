@@ -1,6 +1,5 @@
 import React from "react";
 import ReactApexChart from "react-apexcharts";
-// import { series } from "./your-series-data"; // Import your series data
 
 export const AreaChart: React.FC = () => {
      const state = {
