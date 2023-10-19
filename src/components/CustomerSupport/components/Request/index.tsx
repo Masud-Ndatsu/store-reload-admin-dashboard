@@ -1,13 +1,37 @@
-import { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { SlOptionsVertical } from "react-icons/sl";
 import { api } from "../../../../api/request";
 import { USER_URL } from "../../../../constants";
 import { useAuthToken } from "../../../../hooks/useAuthToken";
 
+interface TooltipProps {
+     content: any;
+}
+
+const Tooltip = ({ content }: TooltipProps) => {
+     return (
+          <ul
+               style={{
+                    position: "absolute",
+                    background: "white",
+                    boxShadow: "0px 0px 5px rgba(0, 0, 0, 0.1)",
+                    border: "1px solid rgba(0, 0, 0, 0.1)",
+                    listStyle: "none",
+                    zIndex: "9999",
+                    top: "3rem",
+                    right: "2.5rem",
+               }}
+          >
+               {content}
+          </ul>
+     );
+};
+
 const Request = () => {
      const { token } = useAuthToken();
      const [supports, setSupports] = useState<any[]>([]);
      const [toolTip, setToolTip] = useState<boolean>(false);
+     const [selectedSupport, setSelectedSupport] = useState<any>({} as any); // Track selected support message
 
      const getSupportMessages = useCallback(async () => {
           try {
@@ -26,50 +50,85 @@ const Request = () => {
           getSupportMessages();
      }, [getSupportMessages]);
 
+     useEffect(() => {
+          document.addEventListener("click", () => {
+               if (toolTip) {
+                    setToolTip(false);
+               }
+          });
+
+          return () => {
+               document.removeEventListener("click", () => {
+                    if (toolTip) {
+                         setToolTip(false);
+                    }
+               });
+          };
+     }, [toolTip]);
+
+     const handleTooltip = (support: any, e: any) => {
+          e.stopPropagation();
+          setSelectedSupport(support);
+          setToolTip(!toolTip);
+     };
+
      return (
           <>
                {supports.map((support, index) => {
                     const date = new Date(support.createdAt);
                     return (
-                         <tr style={{ cursor: "pointer" }} key={support?._id}>
-                              <td>{(index + 1).toString().padStart(2, "0")}</td>
-                              <td>{support.user?.shop[0].shop_name}</td>
-                              <td>{support?.message}</td>
-                              <td>New</td>
-                              <td>{date.toLocaleString()}</td>
-                              <td style={{ position: "relative" }}>
-                                   <SlOptionsVertical
-                                        height={"100%"}
-                                        width={"100%"}
-                                        onClick={() => setToolTip(!toolTip)}
-                                   />
-
-                                   {toolTip && (
-                                        <ul
-                                             style={{
-                                                  position: "absolute",
-                                                  backgroundColor: "whitesmoke",
-                                                  listStyle: "none",
-                                             }}
-                                        >
-                                             <li
-                                                  style={{
-                                                       padding: ".75rem 1rem",
-                                                  }}
-                                             >
-                                                  Read
-                                             </li>
-                                             <li
-                                                  style={{
-                                                       padding: ".75rem 1rem",
-                                                  }}
-                                             >
-                                                  Delete
-                                             </li>
-                                        </ul>
-                                   )}
-                              </td>
-                         </tr>
+                         <React.Fragment key={support._id}>
+                              <tr
+                                   style={{
+                                        cursor: "pointer",
+                                        position: "relative",
+                                   }}
+                                   key={support?._id}
+                              >
+                                   <td>
+                                        {(index + 1)
+                                             .toString()
+                                             .padStart(2, "0")}
+                                   </td>
+                                   <td>{support.user?.shop[0].shop_name}</td>
+                                   <td>{support?.message}</td>
+                                   <td>New</td>
+                                   <td>{date.toLocaleString()}</td>
+                                   <td>
+                                        <SlOptionsVertical
+                                             height={"100%"}
+                                             width={"100%"}
+                                             onClick={(e: any) =>
+                                                  handleTooltip(support, e)
+                                             }
+                                        />
+                                        {toolTip &&
+                                             selectedSupport._id ===
+                                                  support._id && (
+                                                  <Tooltip
+                                                       content={
+                                                            <>
+                                                                 <li
+                                                                      style={{
+                                                                           padding: "0.75rem 2rem",
+                                                                      }}
+                                                                 >
+                                                                      Read
+                                                                 </li>
+                                                                 <li
+                                                                      style={{
+                                                                           padding: "0.75rem 2rem",
+                                                                      }}
+                                                                 >
+                                                                      Delete
+                                                                 </li>
+                                                            </>
+                                                       }
+                                                  />
+                                             )}
+                                   </td>
+                              </tr>
+                         </React.Fragment>
                     );
                })}
           </>
