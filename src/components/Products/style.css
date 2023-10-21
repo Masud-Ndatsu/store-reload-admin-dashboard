@@ -1,10 +1,11 @@
-.product-item {
-    font-size: 1.525rem;
+.product-item td {
+     font-size: 1rem;
 }
+
 .product-item:hover {
-    background-color: rgba(200, 200, 200, 0.5);
+     background-color: rgba(200, 200, 200, 0.5);
 }
 
 .product-item:active {
-    background-color: rgba(200, 200, 200, 0.7);
+     background-color: rgba(200, 200, 200, 0.7);
 }
