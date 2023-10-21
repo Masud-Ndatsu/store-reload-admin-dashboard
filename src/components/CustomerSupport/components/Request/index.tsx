@@ -3,6 +3,7 @@ import { SlOptionsVertical } from "react-icons/sl";
 import { api } from "../../../../api/request";
 import { USER_URL } from "../../../../constants";
 import { useAuthToken } from "../../../../hooks/useAuthToken";
+import { MessageForm } from "../Messages/Message";
 
 interface TooltipProps {
      content: any;
@@ -31,7 +32,8 @@ const Request = () => {
      const { token } = useAuthToken();
      const [supports, setSupports] = useState<any[]>([]);
      const [toolTip, setToolTip] = useState<boolean>(false);
-     const [selectedSupport, setSelectedSupport] = useState<any>({} as any); // Track selected support message
+     const [selectedSupport, setSelectedSupport] = useState<any>({} as any);
+     const [isMessage, setIsMessage] = useState<boolean>(false);
 
      const getSupportMessages = useCallback(async () => {
           try {
@@ -76,6 +78,7 @@ const Request = () => {
           <>
                {supports.map((support, index) => {
                     const date = new Date(support.createdAt);
+                    console.log(support);
                     return (
                          <React.Fragment key={support._id}>
                               <tr
@@ -96,8 +99,9 @@ const Request = () => {
                                    <td>{date.toLocaleString()}</td>
                                    <td>
                                         <SlOptionsVertical
-                                             height={"100%"}
-                                             width={"100%"}
+                                             style={{
+                                                  fontSize: "1.3rem",
+                                             }}
                                              onClick={(e: any) =>
                                                   handleTooltip(support, e)
                                              }
@@ -112,6 +116,11 @@ const Request = () => {
                                                                       style={{
                                                                            padding: "0.75rem 2rem",
                                                                       }}
+                                                                      onClick={() =>
+                                                                           setIsMessage(
+                                                                                true
+                                                                           )
+                                                                      }
                                                                  >
                                                                       Read
                                                                  </li>
@@ -124,6 +133,18 @@ const Request = () => {
                                                                  </li>
                                                             </>
                                                        }
+                                                  />
+                                             )}
+
+                                        {isMessage &&
+                                             selectedSupport._id ===
+                                                  support._id && (
+                                                  <MessageForm
+                                                       isMessage={isMessage}
+                                                       setIsMessage={
+                                                            setIsMessage
+                                                       }
+                                                       support={support}
                                                   />
                                              )}
                                    </td>
