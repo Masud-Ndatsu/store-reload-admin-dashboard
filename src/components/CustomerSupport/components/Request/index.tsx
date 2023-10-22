@@ -78,7 +78,6 @@ const Request = () => {
           <>
                {supports.map((support, index) => {
                     const date = new Date(support.createdAt);
-                    console.log(support);
                     return (
                          <React.Fragment key={support._id}>
                               <tr
