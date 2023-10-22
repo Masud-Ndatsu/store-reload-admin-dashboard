@@ -11,12 +11,28 @@ export const Settings = () => {
      const { token } = useAuthToken();
      const [_preview, setPreview] = useState<string>("");
      const [loading, setLoading] = useState<boolean>(false);
-     const inputRef = useRef<HTMLInputElement>(null);
-     const [email, setEmail] = useState("");
-     const [password, setPassword] = useState("");
+     const inputFileRef = useRef<HTMLInputElement>(null);
+     const passwordRef = useRef<HTMLInputElement>(null);
+     const emailRef = useRef<HTMLInputElement>(null);
+     const [disabled, setDisabled] = useState<{
+          email: boolean;
+          password: boolean;
+     }>({ email: true, password: true });
+     const [email, setEmail] = useState<string>("");
+     const [password, setPassword] = useState<string>("");
 
-     const handleInputRef = () => {
-          inputRef.current?.click();
+     const handlePasswordRef = () => {
+          setDisabled({ ...disabled, password: false });
+          passwordRef.current?.focus();
+     };
+
+     const handleEmailRef = () => {
+          setDisabled({ ...disabled, email: false });
+          emailRef.current?.focus();
+     };
+
+     const handleInputFileRef = () => {
+          inputFileRef.current?.click();
      };
 
      const handleAvatarUpload = useCallback(async (e: any) => {
@@ -30,18 +46,63 @@ export const Settings = () => {
                     fd.append("avatar", file);
                }
                setLoading(true);
-               await api().put(`${USER_URL}/avatar`, fd, {
+               await api().put(`${USER_URL}/me`, fd, {
                     headers: {
                          "Content-Type": "multipart/form-data",
                          Authorization: `Bearer ${token}`,
                     },
                });
                setLoading(false);
-          } catch (error: any) {
+          } catch (error) {
                setLoading(false);
                console.log({ error });
           }
      }, []);
+
+     const handleSubmit = async (e: any) => {
+          e.preventDefault();
+          try {
+               setLoading(true);
+               if (email) {
+                    const response = await api().put(
+                         `${USER_URL}/me`,
+                         {
+                              email,
+                         },
+                         {
+                              headers: {
+                                   "Content-Type": "multipart/form-data",
+                                   Authorization: `Bearer ${token}`,
+                              },
+                         }
+                    );
+                    setEmail("");
+                    console.log("RESPONSE: ", response);
+               }
+
+               if (password) {
+                    const response = await api().put(
+                         `${USER_URL}/me`,
+                         {
+                              password,
+                         },
+                         {
+                              headers: {
+                                   "Content-Type": "multipart/form-data",
+                                   Authorization: `Bearer ${token}`,
+                              },
+                         }
+                    );
+                    setPassword("");
+                    console.log("RESPONSE: ", response);
+               }
+
+               setLoading(false);
+          } catch (error) {
+               setLoading(false);
+               console.log({ error });
+          }
+     };
 
      return (
           <div>
@@ -58,7 +119,7 @@ export const Settings = () => {
                          >
                               <input
                                    type="file"
-                                   ref={inputRef}
+                                   ref={inputFileRef}
                                    onChange={handleAvatarUpload}
                                    hidden
                               />
@@ -70,7 +131,7 @@ export const Settings = () => {
                               {true ? (
                                    <div
                                         className="edit-icon"
-                                        onClick={handleInputRef}
+                                        onClick={handleInputFileRef}
                                    >
                                         +
                                    </div>
@@ -80,7 +141,7 @@ export const Settings = () => {
                                    </div>
                               )}
                          </div>
-                         <form action="">
+                         <form action="" onSubmit={handleSubmit}>
                               <div>
                                    <label htmlFor="email">
                                         Enter your email
@@ -90,12 +151,14 @@ export const Settings = () => {
                                              type="text"
                                              name="email"
                                              value={email}
+                                             ref={emailRef}
                                              placeholder="mrjude@gmail.com"
+                                             disabled={disabled.email}
                                              onChange={(e) =>
                                                   setEmail(e.target.value)
                                              }
                                         />
-                                        <FiEdit2 />
+                                        <FiEdit2 onClick={handleEmailRef} />
                                    </div>
                               </div>
                               <div>
@@ -108,12 +171,21 @@ export const Settings = () => {
                                              name="password"
                                              value={password}
                                              placeholder="Storereload"
+                                             ref={passwordRef}
+                                             disabled={disabled.password}
                                              onChange={(e) =>
                                                   setPassword(e.target.value)
                                              }
                                         />
-                                        <FiEdit2 />
+                                        <FiEdit2 onClick={handlePasswordRef} />
                                    </div>
+                              </div>
+                              <div>
+                                   {email || password ? (
+                                        <button type="submit">Save</button>
+                                   ) : (
+                                        ""
+                                   )}
                               </div>
                          </form>
                     </div>
