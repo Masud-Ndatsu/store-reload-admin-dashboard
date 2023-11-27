@@ -138,7 +138,7 @@ export const ProductForm = React.memo(function ProductForm(props: IProps) {
           [categories, type]
      );
 
-     const newProductModal = useMemo(() => {
+     const newProductModal = () => {
           return (
                <div className="product">
                     <div className="image-box">
@@ -305,7 +305,7 @@ export const ProductForm = React.memo(function ProductForm(props: IProps) {
                               </select>
                          </div>
                          <Input
-                              label="Product Manufacturer"
+                              label="Product Brand"
                               type="text"
                               name="manufacturer"
                               value={productManufacturer}
@@ -325,22 +325,7 @@ export const ProductForm = React.memo(function ProductForm(props: IProps) {
                     </form>
                </div>
           );
-     }, [
-          handleFileUpload,
-          imagePreviews,
-          handleSubmit,
-          productCategory,
-          categories,
-          productName,
-          productDescription,
-          productSize,
-          productPrice,
-          productTags,
-          productType,
-          productInventry,
-          productManufacturer,
-     ]);
-
+     };
      return (
           <>
                <Modal
@@ -355,7 +340,7 @@ export const ProductForm = React.memo(function ProductForm(props: IProps) {
                          }}
                     >
                          <h1>Add Product</h1>
-                         {loading ? <Loading /> : newProductModal}
+                         {loading ? <Loading /> : newProductModal()}
                     </div>
                     <ToastContainer />
                </Modal>

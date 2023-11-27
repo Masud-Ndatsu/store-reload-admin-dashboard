@@ -20,10 +20,7 @@ export const ProductTag = React.memo(({ tags, setTags }: Iprops) => {
      };
 
      const handleTagRemove = (tagToRemove: string) => {
-          const updatedTags = React.useMemo(
-               () => tags.filter((tag: string) => tag !== tagToRemove),
-               []
-          );
+          const updatedTags = tags.filter((tag: string) => tag !== tagToRemove);
           setTags(updatedTags);
      };
      return (
@@ -57,7 +54,7 @@ export const ProductTag = React.memo(({ tags, setTags }: Iprops) => {
                                              top: "-.5rem",
                                              right: "-1rem",
                                              color: "#444",
-                                             fontSize: "12px",
+                                             fontSize: "14px",
                                              padding: "0.102rem 0.25rem",
                                              cursor: "pointer",
                                         }}
